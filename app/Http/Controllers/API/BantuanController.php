@@ -64,46 +64,50 @@ class BantuanController extends BaseController
 
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'program_id' => 'required',
-                'jumlah' => 'required',
-                'provinsi_id' => 'required|integer',
-                'kabupaten_id' => 'required|integer',
-                'kecamatan_id' => 'required|integer',
-                'tanggal' => 'required',
-                'keterangan' => '',
-            ]);
-            if ($request->ID == 0) {
-
+        if (Auth::user()->level == 2) {
+            return $this->sendError('Only admin can access', ['error' => 'level admin']);
+        } else {
+            try {
                 $request->validate([
-                    'file_bukti' => 'required|mimes:png,jpg,jpeg,pdf|max:2048',
+                    'program_id' => 'required',
+                    'jumlah' => 'required',
+                    'provinsi_id' => 'required|integer',
+                    'kabupaten_id' => 'required|integer',
+                    'kecamatan_id' => 'required|integer',
+                    'tanggal' => 'required',
+                    'keterangan' => '',
                 ]);
+                if ($request->ID == 0) {
 
-                $cekFile = $this->cekTheFile($request);
+                    $request->validate([
+                        'file_bukti' => 'required|mimes:png,jpg,jpeg,pdf|max:2048',
+                    ]);
 
-                $validate = $request->input();
-                $validate['user_id'] = Auth::user()->id;
-                $validate['status'] = 'pending';
-                $validate['file_bukti'] = $cekFile['file_path'];
-                $validate['file_type'] = $cekFile['type'];
-                $validate['file_size'] = $cekFile['size'];
-                Bantuan::create($validate);
-            } else {
-                $cekFile = $this->cekTheFileUpdate($request);
+                    $cekFile = $this->cekTheFile($request);
 
-                $validate = $request->input();
+                    $validate = $request->input();
+                    $validate['user_id'] = Auth::user()->id;
+                    $validate['status'] = 'pending';
+                    $validate['file_bukti'] = $cekFile['file_path'];
+                    $validate['file_type'] = $cekFile['type'];
+                    $validate['file_size'] = $cekFile['size'];
+                    Bantuan::create($validate);
+                } else {
+                    $cekFile = $this->cekTheFileUpdate($request);
 
-                $validate['file_bukti'] = $cekFile['file_path'];
-                $validate['file_type'] = $cekFile['type'];
-                $validate['file_size'] = $cekFile['size'];
+                    $validate = $request->input();
 
-                Bantuan::where('id', $request->ID)->update($validate);
+                    $validate['file_bukti'] = $cekFile['file_path'];
+                    $validate['file_type'] = $cekFile['type'];
+                    $validate['file_size'] = $cekFile['size'];
+
+                    Bantuan::where('id', $request->ID)->update($validate);
+                }
+
+                return $this->sendResponse([], 'save or update successfully.');
+            } catch (\Exception $err) {
+                return $this->sendError($err->getMessage(), ['error' => 'something error']);
             }
-
-            return $this->sendResponse([], 'save or update successfully.');
-        } catch (\Exception $err) {
-            return $this->sendError($err->getMessage(), ['error' => 'something error']);
         }
     }
 

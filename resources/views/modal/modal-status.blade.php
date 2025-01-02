@@ -23,7 +23,8 @@
     <input type="hidden" name="ID" value="{{ request()->parent }}">
     <div class="modal-body">
         <div class="mb-3">
-            <select class="form-control select-2" name="status" id="value_status" onchange="changeStatus()" required>
+            <select class="form-control select-2" name="status" id="value_status" onchange="changeStatus()" required
+                style="width: 100%;">
                 {!! OptionCreate(['pending', 'disetujui', 'ditolak'], ['Pending', 'Disetujui', 'Ditolak'], $status) !!}
             </select>
         </div>
