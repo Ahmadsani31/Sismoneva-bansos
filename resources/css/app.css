@@ -1,0 +1,159 @@
+@import '@public/assets/css/theme.min.css';
+     
+     .text-primary {
+            color: #624bff;
+        }
+
+        .text-secondary {
+            color: #637381;
+        }
+
+        .text-success {
+            color: #198754;
+        }
+
+        .text-warning {
+            color: #f59e0b;
+        }
+
+        .text-info {
+            color: #0ea5e9;
+        }
+
+        .text-dark {
+            color: #212b36;
+        }
+
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        .select2-dropdown.increasedzindexclass {
+        z-index: 999999;
+        }
+        .select2-container .select2-selection--single {
+            box-sizing: border-box;
+            cursor: pointer;
+            display: block;
+            height: 40px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #444;
+            line-height: 39px;
+        }
+
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            display: block;
+            padding-left: 17px;
+            padding-right: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 39px;
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            width: 20px;
+        }
+
+
+        #page-pre-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background-color: rgba(197, 197, 197, 0.3)
+        }
+
+        #page-pre-loader .loader-section {
+            position: fixed;
+            top: 0;
+            width: 51%;
+            height: 100%;
+            z-index: 1000;
+            background: #47a3da;
+            -webkit-transform: translateX(0);
+            -ms-transform: translateX(0);
+            transform: translateX(0);
+        }
+
+        #loader-circle {
+            display: block;
+            position: relative;
+            left: 50%;
+            top: 45%;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #624aff;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            z-index: 1001;
+        }
+
+        #loader-circle:before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #624aff;
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+        }
+
+        #loader-circle:after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #624aff;
+            -webkit-animation: spin 1.5s linear infinite;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
