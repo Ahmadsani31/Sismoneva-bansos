@@ -20,7 +20,7 @@
         $file_bukti = $query->file_bukti;
         $keterangan_status = $query->keterangan_status;
 
-        $url_file = Illuminate\Support\Facades\Storage::url($file_bukti);
+        $url_file = url('/storage/' . $file_bukti);
 
         $provinsi_id = DB::table('indonesia_provinces')->select('name')->where('id', $provinsi_id)->pluck('name');
         $kabupaten_id = DB::table('indonesia_cities')->select('name')->where('id', $kabupaten_id)->pluck('name');

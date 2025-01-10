@@ -43,51 +43,7 @@ class DeleteController extends Controller
                         return response()->json(['param' => false, 'message' => $err->getMessage()]);
                     }
                     break;
-                case 'potongan':
-                    try {
-                        $data = Potongan::findOrFail($id);
-                        $data->delete();
-                        return response()->json(['param' => true, 'message' => 'Data Berhasil Dihapus']);
-                    } catch (\Exception $err) {
-                        return response()->json(['param' => false, 'message' => $err->getMessage()]);
-                    }
-                    break;
-                case 'tunjangan':
-                    try {
-                        $data = Tunjangan::findOrFail($id);
-                        $data->delete();
-                        return response()->json(['param' => true, 'message' => 'Data Berhasil Dihapus']);
-                    } catch (\Exception $err) {
-                        return response()->json(['param' => false, 'message' => $err->getMessage()]);
-                    }
-                    break;
-                case 'jabatan':
-                    try {
-                        $data = Jabatan::findOrFail($id);
-                        $data->delete();
-                        return response()->json(['param' => true, 'message' => 'Data Berhasil Dihapus']);
-                    } catch (\Exception $err) {
-                        return response()->json(['param' => false, 'message' => $err->getMessage()]);
-                    }
-                    break;
-                case 'posisi':
-                    try {
-                        $data = Posisi::findOrFail($id);
-                        $data->delete();
-                        return response()->json(['param' => true, 'message' => 'Data Berhasil Dihapus']);
-                    } catch (\Exception $err) {
-                        return response()->json(['param' => false, 'message' => $err->getMessage()]);
-                    }
-                    break;
-                case 'mitra':
-                    try {
-                        $data = Mitra::findOrFail($id);
-                        $data->delete();
-                        return response()->json(['param' => true, 'message' => 'Data Berhasil Dihapus']);
-                    } catch (\Exception $err) {
-                        return response()->json(['param' => false, 'message' => $err->getMessage()]);
-                    }
-                    break;
+
                 default:
                     return response()->json(['param' => false, 'message' => 'Settingan untuk delete blum ada']);
                     break;

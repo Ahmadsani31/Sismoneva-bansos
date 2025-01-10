@@ -132,16 +132,22 @@ class BantuanController extends Controller
         ]]);
     }
 
-    public function jumlah_perwilayah()
+    public function jumlah_perwilayah(Request $request)
     {
-        $sql = DB::table('bantuan')
-            ->select(DB::raw('SUM(bantuan.jumlah) as jumlah'), 'indonesia_provinces.name as name')
-            ->join('indonesia_provinces', 'bantuan.provinsi_id', '=', 'indonesia_provinces.id');
+        if ($request->get('wilayah') == 'provinsi') {
+            $sql = DB::table('bantuan')
+                ->select(DB::raw('SUM(bantuan.jumlah) as jumlah'), 'indonesia_provinces.name as name', 'bantuan.provinsi_id as wilayah')
+                ->join('indonesia_provinces', 'bantuan.provinsi_id', '=', 'indonesia_provinces.id');
+        } else {
+            $sql = DB::table('bantuan')
+                ->select(DB::raw('SUM(bantuan.jumlah) as jumlah'), 'indonesia_cities.name as name', 'bantuan.kabupaten_id as wilayah')
+                ->join('indonesia_cities', 'bantuan.kabupaten_id', '=', 'indonesia_cities.id');
+        }
 
         if (Auth::user()->level == 2) {
-            $sql->where('user_id', Auth::user()->id);
+            $sql->where('bantuan.user_id', Auth::user()->id);
         }
-        $query = $sql->groupBy('bantuan.provinsi_id')
+        $query = $sql->groupBy('wilayah')
             ->get();
 
         foreach ($query as $value) {
@@ -335,8 +341,8 @@ class BantuanController extends Controller
     {
         try {
             $bantuan = Bantuan::findOrFail(Crypt::decrypt($id));
-            $file =  Storage::disk('public')->get($bantuan->file_bukti);
-            $mimeType =  Storage::disk('public')->mimeType($bantuan->file_bukti);
+            $file =  Storage::disk('public')->get(str_replace(url('/storage'), "", $bantuan->file_bukti));
+            $mimeType =  Storage::disk('public')->mimeType(str_replace(url('/storage'), "", $bantuan->file_bukti));
             return response($file)->header('Content-Type', $mimeType);
         } catch (\Throwable $err) {
             abort(404);

@@ -26,88 +26,89 @@ class BantuanController extends BaseController
 
     public function storeStatus(Request $request)
     {
-        try {
+        if (Auth::user()->level == 2) {
+            return $this->sendError('Only admin can access', ['error' => 'level admin']);
+        } else {
+            try {
 
-            $request->validate([
-                'status' => 'required',
-            ]);
-
-            if ($request->status == 'ditolak') {
                 $request->validate([
-                    'keterangan_status' => 'required',
+                    'status' => 'required',
                 ]);
+
+                if ($request->status == 'ditolak') {
+                    $request->validate([
+                        'keterangan_status' => 'required',
+                    ]);
+                }
+
+                $bantuan = Bantuan::with('user')->find($request->ID);
+
+                $messages["user"] = "Halo {$bantuan->user->name}";
+                $messages["title"] = "Admin, baru saya memperbarui status bantuan sosial kamu";
+                $messages["status"] = 'Status : ' . Str::upper($request->status);
+                if ($request->keterangan_status) {
+                    $messages["body"] = 'Keterangan : ' . $request->keterangan_status;
+                } else {
+                    $messages["body"] = "";
+                }
+
+                $bantuan->user->notify(new UpBansos($messages));
+                Bantuan::where('id', $request->ID)->update([
+                    'status' => $request->status,
+                    'keterangan_status' => $request->keterangan_status,
+                ]);
+
+                return response()->json(['param' => true, 'message' => 'Successfully']);
+            } catch (\Exception $err) {
+                return response()->json(['param' => false, 'message' => 'Data not found']);
             }
-
-            $bantuan = Bantuan::with('user')->find($request->ID);
-
-            $messages["user"] = "Halo {$bantuan->user->name}";
-            $messages["title"] = "Admin, baru saya memperbarui status bantuan sosial kamu";
-            $messages["status"] = 'Status : ' . Str::upper($request->status);
-            if ($request->keterangan_status) {
-                $messages["body"] = 'Keterangan : ' . $request->keterangan_status;
-            } else {
-                $messages["body"] = "";
-            }
-
-            $bantuan->user->notify(new UpBansos($messages));
-            Bantuan::where('id', $request->ID)->update([
-                'status' => $request->status,
-                'keterangan_status' => $request->keterangan_status,
-            ]);
-
-            return response()->json(['param' => true, 'message' => 'Successfully']);
-        } catch (\Exception $err) {
-            return response()->json(['param' => false, 'message' => $err->getMessage()]);
         }
     }
 
 
     public function store(Request $request)
     {
-        if (Auth::user()->level == 2) {
-            return $this->sendError('Only admin can access', ['error' => 'level admin']);
-        } else {
-            try {
+
+        try {
+            $request->validate([
+                'program_id' => 'required',
+                'jumlah' => 'required',
+                'provinsi_id' => 'required|integer',
+                'kabupaten_id' => 'required|integer',
+                'kecamatan_id' => 'required|integer',
+                'tanggal' => 'required',
+                'keterangan' => '',
+            ]);
+            if ($request->ID == 0) {
+
                 $request->validate([
-                    'program_id' => 'required',
-                    'jumlah' => 'required',
-                    'provinsi_id' => 'required|integer',
-                    'kabupaten_id' => 'required|integer',
-                    'kecamatan_id' => 'required|integer',
-                    'tanggal' => 'required',
-                    'keterangan' => '',
+                    'file_bukti' => 'required|mimes:png,jpg,jpeg,pdf|max:2048',
                 ]);
-                if ($request->ID == 0) {
 
-                    $request->validate([
-                        'file_bukti' => 'required|mimes:png,jpg,jpeg,pdf|max:2048',
-                    ]);
+                $cekFile = $this->cekTheFile($request);
 
-                    $cekFile = $this->cekTheFile($request);
+                $validate = $request->input();
+                $validate['user_id'] = Auth::user()->id;
+                $validate['status'] = 'pending';
+                $validate['file_bukti'] = $cekFile['file_path'];
+                $validate['file_type'] = $cekFile['type'];
+                $validate['file_size'] = $cekFile['size'];
+                Bantuan::create($validate);
+            } else {
+                $cekFile = $this->cekTheFileUpdate($request);
 
-                    $validate = $request->input();
-                    $validate['user_id'] = Auth::user()->id;
-                    $validate['status'] = 'pending';
-                    $validate['file_bukti'] = $cekFile['file_path'];
-                    $validate['file_type'] = $cekFile['type'];
-                    $validate['file_size'] = $cekFile['size'];
-                    Bantuan::create($validate);
-                } else {
-                    $cekFile = $this->cekTheFileUpdate($request);
+                $validate = $request->input();
 
-                    $validate = $request->input();
+                $validate['file_bukti'] = $cekFile['file_path'];
+                $validate['file_type'] = $cekFile['type'];
+                $validate['file_size'] = $cekFile['size'];
 
-                    $validate['file_bukti'] = $cekFile['file_path'];
-                    $validate['file_type'] = $cekFile['type'];
-                    $validate['file_size'] = $cekFile['size'];
-
-                    Bantuan::where('id', $request->ID)->update($validate);
-                }
-
-                return $this->sendResponse([], 'save or update successfully.');
-            } catch (\Exception $err) {
-                return $this->sendError($err->getMessage(), ['error' => 'something error']);
+                Bantuan::where('id', $request->ID)->update($validate);
             }
+
+            return $this->sendResponse([], 'save or update successfully.');
+        } catch (\Exception $err) {
+            return $this->sendError($err->getMessage(), ['error' => 'something error']);
         }
     }
 

@@ -75,7 +75,7 @@
                 <!-- card  -->
                 <div class="card">
                     <div class="card-header">
-                        <select class="form-control select-2" name="aktif" id="aktif">
+                        <select class="form-control select-2" name="wilayahID" id="wilayahID" onchange="getWilayah()">
                             {!! OptionCreate(['provinsi', 'kabupaten'], ['Provinsi', 'Kabupaten'], '') !!}
                         </select>
                     </div>
@@ -210,8 +210,10 @@
         }
         getWilayah()
         async function getWilayah() {
+            // console.log(value);
+            var valueWilayah = $('#wilayahID').val();
             try {
-                var response = await axios.get("{{ route('bantuan.wilayah') }}");
+                var response = await axios.get("{{ route('bantuan.wilayah') }}?wilayah=" + valueWilayah);
                 console.log(response);
                 var dSeries = response.data.items.series;
                 var dCategories = response.data.items.categories;

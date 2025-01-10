@@ -4,6 +4,10 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta name="description"
+        content="Website SISTEM MONITORING DAN EVALUASI PROGRAM BANTUAN SOSIAL Aplikasi tester lamaran perusahaan">
+    <meta name="keywords" content="PHP, Laravel, Laravel 11,,Bansos,Sistem monitoring">
+    <meta name="author" content="Ahmad Darma Sani (adsa)">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/') }}assets/images/favicon/favicon.ico">
@@ -18,7 +22,7 @@
         integrity="sha512-OYtfQLIh44db+qhIErkWKrmij09a8CNwItEH4yiRIY0gZhRj2sKNIIsRrvEPdqMbgzT1opjSAJXsteTfxuJjOQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Theme CSS -->
-    <title>{{ $pageTitle ?? 'Page' }} | PT Wiratama</title>
+    <title>{{ $pageTitle ?? 'Page' }} | SISTEM MONITORING DAN EVALUASI PROGRAM BANTUAN SOSIAL</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
